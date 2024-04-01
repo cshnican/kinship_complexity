@@ -118,7 +118,7 @@ data_pc <- extension_list_by_language %>% left_join(pcs, by='Glottocode') %>%
   mutate(Glottocode2 = Glottocode) %>%
   ungroup()
 
-write.csv(data_pc, '../data/main.csv', row.names = FALSE)
+write.csv(data_pc, '../output_table/main.csv', row.names = FALSE)
 
 # visualize
 fit1 <- lm(complexity ~ PC1, data=data_pc)
@@ -126,6 +126,22 @@ fit1 <- lm(complexity ~ PC1, data=data_pc)
 pdf('../imgs/main.pdf', width=10, height=6)
 ggplot(data_pc, aes(x=PC1, y=complexity)) +
   stat_smooth(method = "lm", col = "orange") +
+  geom_point(alpha=0.6) +
+  xlab('Sociopolitical Complexity Scale (SCI)') +
+  ylab('Kinship System Complexity') +
+  scale_x_reverse() +
+  geom_label(aes(x = 4, y = 1200), hjust = 0, 
+             label = paste("Adj R2 = ",signif(summary(fit1)$adj.r.squared, 5),
+                           "\nIntercept =",signif(fit1$coef[[1]],5 ),
+                           " \nSlope =",signif(fit1$coef[[2]], 5),
+                           " \nP =",signif(summary(fit1)$coef[2,4], 5))) +
+  theme_classic(15)
+dev.off()
+
+pdf('../imgs/main_by_family.pdf', width=15, height=10)
+ggplot(data_pc, aes(x=PC1, y=complexity)) +
+  stat_smooth(method = "lm", col = "orange") +
+  facet_wrap(~Family) +
   geom_point(alpha=0.6) +
   xlab('Sociopolitical Complexity Scale (SCI)') +
   ylab('Kinship System Complexity') +
