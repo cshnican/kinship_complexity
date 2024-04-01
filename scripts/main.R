@@ -127,6 +127,8 @@ pdf('../imgs/main.pdf', width=10, height=6)
 ggplot(data_pc, aes(x=PC1, y=complexity)) +
   stat_smooth(method = "lm", col = "orange") +
   geom_point(alpha=0.6) +
+  xlab('Sociopolitical Complexity Scale (SCI)') +
+  ylab('Kinship System Complexity') +
   scale_x_reverse() +
   geom_label(aes(x = 4, y = 1200), hjust = 0, 
              label = paste("Adj R2 = ",signif(summary(fit1)$adj.r.squared, 5),
@@ -146,6 +148,7 @@ spatial_covar_mat_local = varcov.spatial(data_pc[,c("Longitude", "Latitude")], c
 dimnames(spatial_covar_mat_local) = list(data_pc$Glottocode2, data_pc$Glottocode2)
 spatial_covar_mat_local <- spatial_covar_mat_local / max(spatial_covar_mat_local)
 
+set.seed(123)
 model <- brm(data=data_pc,
              data2=list(A=A, spatial_covar_mat_local=spatial_covar_mat_local),
              family = 'gaussian',
@@ -219,9 +222,6 @@ ggplot(data = world) +
   theme_bw() +
   geom_sf(linewidth=0.1) +
   geom_sf(data = sites, size = 2, shape = 23, fill = sites$hex, alpha=0.5, linewidth=0.1) +
-  # geom_label_repel(data = sites, aes(label = Glottolog_Name, geometry = geometry, color=Family), 
-  #                  stat = 'sf_coordinates',  color = 'black', max.overlaps = 20,
-  #                  force_pull = 0.5)+
   theme(legend.position = 'none')
 dev.off()
 
