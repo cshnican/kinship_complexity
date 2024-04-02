@@ -140,17 +140,17 @@ dev.off()
 
 pdf('../imgs/main_by_family.pdf', width=15, height=10)
 ggplot(data_pc, aes(x=PC1, y=complexity)) +
-  stat_smooth(method = "lm", col = "orange") +
+  stat_smooth(method = "lm", col = "orange", se=F) +
   facet_wrap(~Family) +
   geom_point(alpha=0.6) +
   xlab('Sociopolitical Complexity Scale (SCI)') +
   ylab('Kinship System Complexity') +
   scale_x_reverse() +
-  geom_label(aes(x = 4, y = 1200), hjust = 0, 
-             label = paste("Adj R2 = ",signif(summary(fit1)$adj.r.squared, 5),
-                           "\nIntercept =",signif(fit1$coef[[1]],5 ),
-                           " \nSlope =",signif(fit1$coef[[2]], 5),
-                           " \nP =",signif(summary(fit1)$coef[2,4], 5))) +
+  # geom_label(aes(x = 4, y = 1200), hjust = 0, 
+  #            label = paste("Adj R2 = ",signif(summary(fit1)$adj.r.squared, 5),
+  #                          "\nIntercept =",signif(fit1$coef[[1]],5 ),
+  #                          " \nSlope =",signif(fit1$coef[[2]], 5),
+  #                          " \nP =",signif(summary(fit1)$coef[2,4], 5))) +
   theme_classic(15)
 dev.off()
 
@@ -170,11 +170,47 @@ model <- brm(data=data_pc,
              family = 'gaussian',
              formula = complexity ~ PC1 + (1 | gr(Glottocode2, cov=spatial_covar_mat_local)) + (1 | gr(Glottocode, cov=A)),
              control = list(adapt_delta = 0.95),
-             iter=4000,
+             iter=10000,
              cores=4
 )
 
 summary(model)
+
+# Results
+#  Family: gaussian 
+#   Links: mu = identity; sigma = identity 
+# Formula: complexity ~ PC1 + (1 | gr(Glottocode2, cov = spatial_covar_mat_local)) + (1 | gr(Glottocode, cov = A)) 
+#    Data: data_pc (Number of observations: 440) 
+#   Draws: 4 chains, each with iter = 10000; warmup = 5000; thin = 1;
+#          total post-warmup draws = 20000
+
+# Group-Level Effects: 
+# ~Glottocode (Number of levels: 437) 
+#               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+# sd(Intercept)   143.15     29.66    89.22   205.88 1.00     3823     7873
+
+# ~Glottocode2 (Number of levels: 437) 
+#               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+# sd(Intercept)    62.66     28.42     5.07   111.41 1.00      876     2356
+
+# Population-Level Effects: 
+#           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+# Intercept   420.45     65.31   289.66   549.44 1.00     8243    10973
+# PC1         -11.02      4.19   -19.24    -2.84 1.00    15207    13909
+
+# Family Specific Parameters: 
+#       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+# sigma   138.80     10.72   116.71   157.81 1.00     1152     3104
+
+# Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+# and Tail_ESS are effective sample size measures, and Rhat is the potential
+# scale reduction factor on split chains (at convergence, Rhat = 1).
+
+
+
+
+
+
 
 # plot maps
 world <- ne_countries(scale = 'medium', returnclass = 'sf')
@@ -258,12 +294,5 @@ ex <- tibble(
   rowwise() %>%
   mutate(code=paste(as.character(memCompress(extension_list)), collapse = ''),
          length=str_count(code)) 
-
-
-
-
-
-
-
 
 

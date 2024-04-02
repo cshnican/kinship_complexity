@@ -2,7 +2,7 @@
 
 #SBATCH -p evlab
 #SBATCH --ntasks=1 
-#SBATCH --time=0:20:00
+#SBATCH --time=1:20:00
 #SBATCH --mem=4G
 #SBATCH --output=./slurm_log/main%j.out
 
