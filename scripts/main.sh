@@ -12,7 +12,7 @@ conda activate r_glotto
 echo 'executing main.sh'
 date
 
-Rscript main.R
+Rscript main.R 
 
 
 echo 'finished!'
