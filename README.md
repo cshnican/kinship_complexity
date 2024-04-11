@@ -1,4 +1,4 @@
-# MMore complex societies have more complex kinship lexicons
+# More complex societies have more complex kinship lexicons
 Sihan Chen, David Gil, Antonio Benitez-Burraco
 
 This Github repository contains the data, the analysis script, and the figures in the paper.
