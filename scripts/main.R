@@ -48,7 +48,7 @@ df <- forms %>%
   select(-Source) %>%
   distinct()
 
-extensions <- df %>% 
+extensions <- df %>%  
   filter(Form != 'TRUE') %>%
   group_by(Glottolog_Name, Glottocode, Family, Latitude, Longitude, Form) %>% 
   distinct() %>%
