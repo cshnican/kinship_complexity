@@ -15,6 +15,7 @@ languages <- read.csv('../kinbank/cldf/languages.csv')
 
 not_changing <- c('BornSameDay', 'HusbandsSameGroup', 'WifesSameGroup')
 
+
 parameters <- read.csv('../kinbank/cldf/parameters.csv') %>% 
   rowwise() %>%
   mutate(ID_new = ifelse(grepl('exchange', ID) & !ID %in% not_changing, gsub('exchange', 'X', ID), ID),
